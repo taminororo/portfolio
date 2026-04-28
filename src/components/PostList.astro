@@ -1,0 +1,50 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+  currentLang: 'all' | 'en' | 'ja';
+}
+
+const { posts, currentLang } = Astro.props;
+
+const formatDate = (date: Date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
+const link = (lang: 'all' | 'en' | 'ja') =>
+  lang === 'all' ? '/' : `/${lang}`;
+---
+
+<nav class="lang-filter">
+  {currentLang === 'all'
+    ? <span class="current">All languages</span>
+    : <a href={link('all')}>All languages</a>}
+  <span class="sep">/</span>
+  {currentLang === 'en'
+    ? <span class="current">English</span>
+    : <a href={link('en')}>English</a>}
+  <span class="sep">/</span>
+  {currentLang === 'ja'
+    ? <span class="current">日本語</span>
+    : <a href={link('ja')}>日本語</a>}
+</nav>
+
+{posts.length === 0 ? (
+  <p class="empty">記事がまだありません</p>
+) : (
+  <ul class="post-list">
+    {posts.map((post) => (
+      <li class="post-item">
+        <div class="date">{formatDate(post.data.date)}</div>
+        <h2 class="title">
+          <a href={`/posts/${post.slug}`}>{post.data.title}</a>
+        </h2>
+        <p class="description">{post.data.description}</p>
+      </li>
+    ))}
+  </ul>
+)}
