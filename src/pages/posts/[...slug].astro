@@ -1,0 +1,37 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const formatDate = (date: Date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="post">
+    <div class="date">{formatDate(post.data.date)}</div>
+    <h1>{post.data.title}</h1>
+    <div class="body">
+      <Content />
+    </div>
+    <a class="back-link" href="/">← 一覧へ戻る</a>
+  </article>
+</BaseLayout>
