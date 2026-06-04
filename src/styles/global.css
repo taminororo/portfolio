@@ -197,9 +197,3 @@ article.post .body blockquote {
   color: var(--color-muted);
   margin: 16px 0;
 }
-
-.back-link {
-  display: inline-block;
-  margin-top: 48px;
-  font-size: 14px;
-}
