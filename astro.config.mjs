@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://blog.taminororo.net',
+  site: 'https://taminororo.net',
   trailingSlash: 'ignore',
   build: {
     format: 'directory',
